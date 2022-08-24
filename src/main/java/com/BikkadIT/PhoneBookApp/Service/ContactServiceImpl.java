@@ -1,6 +1,8 @@
 package com.BikkadIT.PhoneBookApp.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,8 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public List<Contact> getAllContact() {
 		List<Contact> findAll = this.contactRepository.findAll();
-		return findAll;
+		List<Contact> collect = findAll.stream().filter(contact->contact.getActiveSwitch() == 'Y').collect(Collectors.toList());
+		return collect;
 	}
 
 	@Override
@@ -37,7 +40,13 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	public boolean deleteContactById(Integer contactId) {
-		// TODO Auto-generated method stub
+		boolean existsById = this.contactRepository.existsById(contactId);
+		
+		if(existsById)
+		{
+			this.contactRepository.deleteById(contactId);
+			return true;
+		}
 		return false;
 	}
 
@@ -47,6 +56,20 @@ public class ContactServiceImpl implements ContactService {
 		
 		if(contact1!=null)
 		{
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean softDeleteById(Integer contactId) {
+		Optional<Contact> findById = this.contactRepository.findById(contactId);
+		
+		if(findById.isPresent())
+		{
+			Contact contact = findById.get();
+			contact.setActiveSwitch('N');
+			Contact contact2 = this.contactRepository.save(contact);
 			return true;
 		}
 		return false;

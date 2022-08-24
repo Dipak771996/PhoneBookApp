@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,7 +70,38 @@ public class ContactController {
 			return new ResponseEntity<String>("Contact not Updated",HttpStatus.BAD_REQUEST);
 
 		}
+			
+	}
+	
+	@DeleteMapping("/hardDelete/{contactId}")
+	public ResponseEntity<String> deleteContactById(@PathVariable Integer contactId)
+	{
+		boolean deleteContactById = this.contactService.deleteContactById(contactId);
 		
+		if(deleteContactById)
+		{
+			return new ResponseEntity<String>("Contact Deleted Successfully",HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("Contact not Deleted Successfully",HttpStatus.BAD_REQUEST);
+
+		}
+
+	}
+	
+	@DeleteMapping("/softDelete/{contactId}")
+	public ResponseEntity<String> softDeleteContactById(@PathVariable Integer contactId)
+	{
+		boolean deleteContactById = this.contactService.softDeleteById(contactId);
 		
+		if(deleteContactById)
+		{
+			return new ResponseEntity<String>("Contact Deleted Successfully",HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("Contact not Deleted Successfully",HttpStatus.BAD_REQUEST);
+
+		}
+
 	}
 }
