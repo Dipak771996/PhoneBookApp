@@ -24,19 +24,31 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	public List<Contact> getAllContact() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contact> findAll = this.contactRepository.findAll();
+		return findAll;
 	}
 
 	@Override
 	public Contact getContactById(Integer contactId) {
-		// TODO Auto-generated method stub
-		return null;
+		Contact contact = this.contactRepository.findById(contactId).get();
+		
+		return contact;
 	}
 
 	@Override
 	public boolean deleteContactById(Integer contactId) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateContact(Contact contact) {
+		Contact contact1 = this.contactRepository.save(contact);
+		
+		if(contact1!=null)
+		{
+			return true;
+		}
 		return false;
 	}
 
